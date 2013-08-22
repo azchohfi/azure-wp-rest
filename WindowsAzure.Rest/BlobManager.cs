@@ -53,14 +53,14 @@ namespace WindowsAzure.Rest
             request.Headers["Authorization"] = authorizationHeader;
             request.ContentLength = blobLength;
 
-            using (var requestStream = await Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, null))
+            using (var requestStream = await Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, null).ConfigureAwait(false))
             {
                 // Read chunks of this file
                 var buffer = new Byte[1024 * 32];
                 int bytesRead;
 
                 var stream = new MemoryStream(blobContent.Length);
-                stream.Write(blobContent, 0, blobContent.Length);
+                await stream.WriteAsync(blobContent, 0, blobContent.Length).ConfigureAwait(false);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 int bytesUploaded = 0;
@@ -79,7 +79,7 @@ namespace WindowsAzure.Rest
                 //requestStream.Write(blobContent, 0, blobLength);
             }
 
-            using (var response = (HttpWebResponse)await Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null))
+            using (var response = (HttpWebResponse)await Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null).ConfigureAwait(false))
             {
                 if (UploadFinishedHandler != null)
                 {
