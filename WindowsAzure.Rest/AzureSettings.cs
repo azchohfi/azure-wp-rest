@@ -8,7 +8,7 @@ namespace WindowsAzure.Rest
         public static string KeySecondString { get; private set; }
         public static string Account { get; private set; }
         public static string BlobEndPoint { get; private set; }
-
+        
         internal static readonly string SharedKeyAuthorizationScheme = "SharedKey";
         internal static byte[] Key;
 
